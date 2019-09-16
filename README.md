@@ -1,3 +1,6 @@
+This is for https://github.com/facebook/react-native/pull/26444
+
+-----------
 
 This project is to test the improvement of `onEndReached` feature of FlatList.
 
@@ -9,7 +12,7 @@ This project is to test the improvement of `onEndReached` feature of FlatList.
 
 ![Current FlatList initial rendering](screenshots/old_flatlist_initial_renering.png)
 
-`OnEndReached` is called twice and has 30 items.
+`OnEndReached` is called twice in a short period and has 30 items.
 
 ### # Patched FlatList
 
@@ -22,10 +25,10 @@ This project is to test the improvement of `onEndReached` feature of FlatList.
 
 ![Current FlatList scrolling](screenshots/old_flatlist_scrolling.png)
 
-`OnEndReached` is called twice, having 50 items.
+`OnEndReached` is called twice in a short period, having 50 items.
 
 ### # Patched FlatList
 
 ![Patched FlatList scrolling](screenshots/patched_flatlist_scrolling.png)
 
-`OnEndReached` is called twice, having 30 items.
+`OnEndReached` is called twice when required, having 30 items.
