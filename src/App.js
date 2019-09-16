@@ -129,6 +129,7 @@ export default class App extends PureComponent<Props, State> {
           pinchGestureEnabled={false}
           onEndReached={this._onEndReached}
           onEndReachedThreshold={onEndReachedThreshold}
+          contentContainerStyle={styles.contentContainer}
         />
       </SafeAreaView>
     );
@@ -142,5 +143,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
+  },
+  contentContainer: {
+    paddingBottom: 100,
   },
 });
