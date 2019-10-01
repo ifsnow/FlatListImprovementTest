@@ -13,13 +13,23 @@ import {
 
 import Option from './Option';
 import Stat from './Stat';
+import Action from './Action';
+import ItemButton from './ItemButton';
 
 type Props = {};
+
+export type ItemSizeType = 'NONE' | 'SMALL' | 'LARGE';
+
+type ItemType = {
+  id: number,
+  title: string,
+  size: ItemSizeType,
+};
 
 type State = {
   isNewFlatlist: boolean,
   FlatListComponent: any,
-  items: any[],
+  items: ItemType[],
   onEndReachedThreshold: number,
   endReachedCount: number,
 };
@@ -33,7 +43,7 @@ export default class App extends PureComponent<Props, State> {
     this.state = {
       isNewFlatlist: true,
       FlatListComponent: FlatListNew,
-      items: this._makeNewItems(10),
+      items: this._makeNewItems(20),
       onEndReachedThreshold: 2,
       endReachedCount: 0,
     };
@@ -42,8 +52,27 @@ export default class App extends PureComponent<Props, State> {
   _keyExtractor = item => `list-${item.id}`;
 
   _renderItem = ({item}) => (
-    <View style={styles.item}>
-      <Text>{item.title}</Text>
+    <View
+      style={[
+        styles.item,
+        item.size === 'SMALL' && styles.itemIsSmall,
+        item.size === 'LARGE' && styles.itemIsLarge,
+      ]}>
+      <View style={styles.itemTitle}>
+        <Text>{item.title}</Text>
+      </View>
+      <View style={styles.itemButtons}>
+        <ItemButton
+          id={item.id}
+          size="SMALL"
+          onPress={this._onChangeItemSize}
+        />
+        <ItemButton
+          id={item.id}
+          size="LARGE"
+          onPress={this._onChangeItemSize}
+        />
+      </View>
     </View>
   );
 
@@ -57,6 +86,7 @@ export default class App extends PureComponent<Props, State> {
       newItems.push({
         id,
         title: `list - ${id}`,
+        size: 'NONE',
       });
     }
     return newItems;
@@ -75,7 +105,7 @@ export default class App extends PureComponent<Props, State> {
     this.setState(prevState => ({
       isNewFlatlist,
       FlatListComponent: isNewFlatlist ? FlatListNew : FlatList,
-      items: this._makeNewItems(10, true),
+      items: this._makeNewItems(20, true),
       endReachedCount:
         prevState.isNewFlatlist !== isNewFlatlist
           ? 0
@@ -98,6 +128,32 @@ export default class App extends PureComponent<Props, State> {
     );
   };
 
+  _onChangeItemSize = (id: number, size: ItemSizeType) => {
+    const items = this.state.items.map(item => ({
+      ...item,
+      size: id === item.id ? size : item.size,
+    }));
+
+    this.setState({
+      items: [...items],
+    });
+  };
+
+  _onPressChangeAllSmall = () => this._changeItemsSize('SMALL');
+
+  _onPressChangeAllLarge = () => this._changeItemsSize('LARGE');
+
+  _changeItemsSize = (size: ItemSizeType) => {
+    const items = this.state.items.map(item => ({
+      ...item,
+      size,
+    }));
+
+    this.setState({
+      items: [...items],
+    });
+  };
+
   render() {
     const {
       items,
@@ -116,6 +172,10 @@ export default class App extends PureComponent<Props, State> {
           onChangeThreshold={this._onChangeThreshold}
         />
         <Stat endReachedCount={endReachedCount} itemLength={items.length} />
+        <Action
+          onPressChangeAllSmall={this._onPressChangeAllSmall}
+          onPressChangeAllLarge={this._onPressChangeAllLarge}
+        />
         <FlatListComponent
           ref={this._listRef}
           data={items}
@@ -139,10 +199,25 @@ export default class App extends PureComponent<Props, State> {
 const styles = StyleSheet.create({
   item: {
     height: 100,
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
+    paddingHorizontal: 16,
+  },
+  itemIsSmall: {
+    height: 50,
+  },
+  itemIsLarge: {
+    height: 200,
+  },
+  itemTitle: {
+    flex: 1,
+  },
+  itemButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   contentContainer: {
     paddingBottom: 100,
