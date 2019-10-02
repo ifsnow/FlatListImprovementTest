@@ -135,22 +135,22 @@ export default class App extends PureComponent<Props, State> {
     }));
 
     this.setState({
-      items: [...items],
+      items,
     });
   };
 
-  _onPressChangeAllSmall = () => this._changeItemsSize('SMALL');
+  _onPressChangeAllSmall = () => this._changeAllItemsSize('SMALL');
 
-  _onPressChangeAllLarge = () => this._changeItemsSize('LARGE');
+  _onPressChangeAllLarge = () => this._changeAllItemsSize('LARGE');
 
-  _changeItemsSize = (size: ItemSizeType) => {
+  _changeAllItemsSize = (size: ItemSizeType) => {
     const items = this.state.items.map(item => ({
       ...item,
       size,
     }));
 
     this.setState({
-      items: [...items],
+      items,
     });
   };
 
@@ -182,7 +182,7 @@ export default class App extends PureComponent<Props, State> {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator
           removeClippedSubviews={false}
           automaticallyAdjustContentInsets={false}
           directionalLockEnabled
